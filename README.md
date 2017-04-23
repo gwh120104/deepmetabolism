@@ -35,8 +35,8 @@ Run the training code
 
 A toy model example:
 
-Give the description of toy model... (Files, how we set up)
-
+TODO: Weihua
+Give the description of toy model... (Files, how we set up, size, reaction number, phenotype number.)
 
 
 Activate the virtual environment `tf` to use GPU
