@@ -1,5 +1,3 @@
-# deepmetabolism
-
 DeepMetabolism
 ----------------
 
