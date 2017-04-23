@@ -33,11 +33,18 @@ Run the training code
 > python train_auto_encoder.py --gene_protein_mask masking_matrix_between_gene_protein_layer --protein_phenotype_mask masking_matrix_between_protein_phenotype_layer --gene unsupervised_training_data --supervised_gene supervised_training_x --phenotype supervised_training_y --pheno_indices phenotype_indices_with_training_data_in_phenotype_layer --unsupervised_epochs epoch_number_of_unsupervised_training  --up_save_to unsupervised_training_result --sup_save_to supervised_training_result
 
 
-An example would be:
+A toy model example:
+
+Give the description of toy model... (Files, how we set up)
+
+
 
 Activate the virtual environment `tf` to use GPU
+
 > source ~/tf/bin/activate
 
 Run the training code for `toy model`
 
 > python train_auto_encoder.py --gene_protein_mask ~/Dropbox/MachineLearning/autoencoder/Model_Design/toy_model/toy_gene_pro_rule.csv --protein_phenotype_mask ~/Dropbox/MachineLearning/autoencoder/Model_Design/toy_model/toy_pro_pheno_rule_growth.csv --gene ~/Dropbox/MachineLearning/autoencoder/Model_Design/toy_model/toy_un_trans.csv --supervised_gene ~/Dropbox/MachineLearning/autoencoder/Model_Design/toy_model/toy_su_trans.csv --phenotype ~/Dropbox/MachineLearning/autoencoder/Model_Design/toy_model/toy_su_pheno_growth.csv --pheno_indices ~/Dropbox/MachineLearning/autoencoder/Model_Design/toy_model/toy_pheno_indices.txt --unsupervised_epochs 50  --up_save_to un_result_toy.csv --sup_save_to su_result_toy.csv
+
+If you want to run the large-scale model, you can ...
