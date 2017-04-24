@@ -8,21 +8,23 @@ The general design principles are:
 * Unsupervised machine learning techniques (such as autoencoder) can be used to train the computational network to approximate the biological network.
 * The whole process is end-to-end, without tweaking between layers.
 
-To develop DeepMetabolism, we implemented a two-step, deep-learning process that used different sets of data. The first step was unsupervised learning that used transcriptomics data, and the second step was supervised learning that used paired data of transcriptomics and phenotype (Figure 1). We expected that unsupervised learning would provide a “rough” neural network model that captured the essence of connections between transcriptomics data and phenotype, while supervised training would fine tune this model and lead to highly accurate predictions of phenotype from transcriptomics data
+To develop DeepMetabolism, we implemented a two-step, deep-learning process that used different sets of data. The first step was unsupervised learning that used transcriptomics data, and the second step was supervised learning that used paired data of transcriptomics and phenotype (Figure 1). We expected that unsupervised learning would provide a “rough” neural network model that captured the essence of connections between transcriptomics data and phenotype, while supervised training would fine tune this model and lead to highly accurate predictions of phenotype from transcriptomics data.
 
 ![overview_deepmetabolism](https://github.com/gwh120104/deepmetabolism/blob/master/img/Figure_README.png)
 Figure 1. Overview of DeepMetabolism algorithm
 
+
 DeepMetabolism model
 ----------------------------------
 
-The layers in the deep learning network of DeepMetabolism is not fully connected due to the biological constraints based on the constraint-based metabolic modeling. The connections between gene and protein layers are defined by the gene-protein-reaction (GPR) association from a well-developed genome-scale metabolic model (GSM model). We recommand to download the high-quality GSM models from [BiGG model database](bigg.ucsd.edu). These connections can be parsed from `cobrapy_model.py`, which used the [cobrapy package](https://github.com/opencobra/cobrapy). The connections between protein and phenotype layers are defined by the essential proteins of each phenotpe based on the GPR association. In general, if the gene knock-out will lead to 5% decrease of the maximum value of the phenotype of interest, the protein node(s) related to this gene will be connected to this phenotype node. To define the connections between each two layers, we provide the `cobrapy_model.py` to directly generate two masking matrices used in the DeepMetabolism training code.
-
-Right now we use a vanilla autoencoder, where the input is gene expression level. We try to reconstruct gene expression level by going through the protein layer and the phenotype layer. Protein and phenotype layers are feed-forward layers (no recurrent or backward connections). The overall architecture of the autoencoder is:
+In DeepMetabolism, we use a vanilla autoencoder, where the input is transcriptomics data (i.e., log2 fold changes of gene expression levels), to implement unsupervised learning process. We try to reconstruct gene expression level by going through the protein layer and the phenotype layer. Protein and phenotype layers are feed-forward layers (no recurrent or backward connections). The overall architecture of the autoencoder is:
 
 <kbd>Gene Expression</kbd> -> <kbd>Protein </kbd> -> <kbd>Phenotype</kbd> -> <kbd>Protein Reconstructed</kbd> -> <kbd> Gene Reconstructed</kbd>
 
-The autoencoder model is defined in `autoencoder.py`. Note that layers are not fully connected (unlike your normal autoencoder) due to biological constraints from the gene-protein-reaction association. In other words, not all gene is affecting all proteins, and not all protein is affecting all phenotypes. It is an obvious truth in biology. When defining the model parameters, we pad the parameters such that weights between layers are defined by a 2-dimensional `[OUT, IN]` tensor `W` such that `W * v_in = v_out`. We mask `W` with `M` such that `W * M * v_in = v_out` where `M` is a 0/1 matrix.
+The autoencoder model is defined in `autoencoder.py`. Note that the layers of the autoencoder model were not fully connected. Instead, we applied biological knowledge to rationally define the connections, which could reduce the risk of over-parameterization and increase the calculation speed. To connect the first layer (i.e., gene layer) and the second layer (i.e., protein layer), we applied the gene-protein association from well-developed, genome-scale metabolic models. We recommand to download the high-quality GSM models from [BiGG model database](bigg.ucsd.edu). To connect the second layer (i.e., protein layer) and the third layer (i.e., phenotype layer), we applied [cobrapy package](https://github.com/opencobra/cobrapy) on the well-developed genome-scale model to identify the proteins that were essential for a certain phenotype (e.g., proteins that were essential for cell growth) and connected these proteins with the corresponding phenotype. 
+
+When defining the model parameters, we pad the parameters such that weights between layers are defined by a 2-dimensional `[OUT, IN]` tensor `W` such that `W * v_in = v_out`. We mask `W` with masking matrix `M` such that `W * M * v_in = v_out` where `M` is a 0/1 matrix. `M` between each two layers can be obtained from `cobrapy_model.py`.
+
 
 DeepMetabolism usage
 -------------------------------
