@@ -47,6 +47,7 @@ Generate masking matrices `M`, and the phenotype indices from a contraint-based 
 
 #### Model training and validing
 DeepMetabolism is designed to run on the GPU based on TensorFlow. But you can run it on either GPU and CPU. It is important to note that, if you run DeepMetabolism on CPU (i.e., skip the following step), the running speed will be dramatically decreased.)
+
 Activate the virtual environment to use GPU (optional)
 > source ~/tf/bin/activate
 
