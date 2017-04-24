@@ -13,6 +13,8 @@ To develop DeepMetabolism, we implemented a two-step, deep-learning process that
 ![overview_deepmetabolism](https://github.com/gwh120104/deepmetabolism/blob/master/img/Figure_README.png)
 Figure 1. Overview of DeepMetabolism algorithm
 
+### How to cite DeepMetabolism?
+[DeepMetabolism: A Deep Learning Algorithm to Predict Phenotype from Genome Sequencing]
 
 DeepMetabolism model
 ----------------------------------
