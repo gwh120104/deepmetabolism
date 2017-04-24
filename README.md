@@ -71,6 +71,6 @@ The toy model for DeepMetabolism is generated from the metabolic model [e_coli_c
 * Check your results with standard results
 > python check_results result_type your_results.csv
 
-### If you want to run the genome model, we provide the iJO1366 model as the demo for DeepMetabolism.
+### A genome model: iJO1366 model as the demo for DeepMetabolism.
 
-The [iJO1366 model](http://bigg.ucsd.edu/models/iJO1366) is available to be [downloaded](http://bigg.ucsd.edu/static/models/iJO1366.xml.gz) from BiGG database. You can easily change the inputs (including the constraint-based reconstructed model, available phenotype names, and all the input data) and follow the above instructions for the toy model to run this genome scale. All the materials is available [here](https://www.dropbox.com/s/7kaw8m7ozp3liyc/iJO1366_demo.tar.gz?dl=0).
+If you want to run a larger-scale model, we provide the iJO1366DM model as a demo. You can easily change the inputs (including the constraint-based reconstructed model, available phenotype names, and all the input data) and follow the above instructions for the toy model to run this genome scale. All the materials related to iJO1366DM model is available [here](https://www.dropbox.com/s/7kaw8m7ozp3liyc/iJO1366_demo.tar.gz?dl=0).
