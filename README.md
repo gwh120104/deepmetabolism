@@ -29,8 +29,8 @@ When defining the model parameters, we pad the parameters such that weights betw
 DeepMetabolism usage
 -------------------------------
 
-Generate masking matrices `M` and related genes from genome-scale metabolic model
->python cobrapy_model 
+Generate masking matrices `M`, and the lists of related genes `gene_id_name.txt` and phenotypes `pheno_id_name.txt` from genome-scale metabolic model
+>python cobrapy_model.py genome_scale_metabolic_model_in_sbml_formate masking_matrix_between_protein_phenotype_layer masking_matrix_between_gene_protein_layer
 
 Activate the virtual environment to use GPU
 > source ~/tf/bin/activate
