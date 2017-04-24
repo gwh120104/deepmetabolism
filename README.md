@@ -46,7 +46,7 @@ DeepMetabolism uses masking matrices to define the connections between each two 
 >python cobrapy_model.py genome_scale_metabolic_model_in_sbml_format phenotype_name_with_supervised_training_data masking_matrix_between_protein_phenotype_layer masking_matrix_between_gene_protein_layer phenotype_indices_file
 
 ### Model training and validing
-DeepMetabolism is designed to run on the GPU based on [TensorFlow](https://www.tensorflow.org/). But you can run it on either GPU and CPU. It is important to note that, if you run DeepMetabolism on CPU (i.e., skip the following step), the running speed will be dramatically decreased.
+DeepMetabolism is designed to run on the GPU based on [TensorFlow](https://www.tensorflow.org/). But you can run it on either GPU and CPU. It is important to note that, if you run DeepMetabolism on CPU (i.e., skip the following step), the running speed will be dramatically decreased. 
 
 * Activate the virtual environment to use GPU (optional)
 > source ~/tf/bin/activate
@@ -54,6 +54,8 @@ DeepMetabolism is designed to run on the GPU based on [TensorFlow](https://www.t
 * Run the training code (including both unsupervised learning and supervised learning processes with 10-fold cross validation)
 > python train_auto_encoder.py --gene_protein_mask masking_matrix_between_gene_protein_layer --protein_phenotype_mask masking_matrix_between_protein_phenotype_layer --gene unsupervised_training_data --supervised_gene supervised_training_x --phenotype supervised_training_y --pheno_indices phenotype_indices_with_training_data_in_phenotype_layer --unsupervised_epochs epoch_number_of_unsupervised_training  --up_save_to unsupervised_training_result --sup_save_to supervised_training_result
 
+### Model output format
+There are two types of output results. For the unsupervised learning process, we apply the final trained autoencoder model to reconstruct the input transcriptomics data, and compare the input (first column) and reconstructed (second column), i.e., `unsupervised_training_result`. For the supervised learning process, we implement 10-fold cross validation and print the results to the result file, i.e., `supervised_training_result`. If you have n types of phenotypes, your result file will have 2n columns. The first n columns (the first half, 1:n) in your result file will represent the corresponding observed values of the n types of phenotypes, and the other half columns (n+1:2n) will represent the corresponding predicted values of the n types of phenotypes. The results from each fold will be stacked by rows.
 
 ### A toy model example for central metabolism of *E. coli*:
 
@@ -66,7 +68,7 @@ The toy model for DeepMetabolism is generated from the metabolic model [e_coli_c
 > source ~/tf/bin/activate
 
 * Run the training and validation code for `toy model`
-> python train_auto_encoder.py --gene_protein_mask toy_model/toy_gene_pro_rule.csv --protein_phenotype_mask toy_model/toy_pro_pheno_rule_growth.csv --gene toy_model/toy_unsupervised_trans.csv --supervised_gene toy_model/toy_supervised_trans.csv --phenotype toy_model/toy_supervised_pheno_growth.csv --pheno_indices toy_model/toy_pheno_indices.txt --unsupervised_epochs 50  --up_save_to toy_model/your_unsupervised_learning_result.csv --sup_save_to toy_model/your_supervised_learning_results.csv
+> python train_auto_encoder.py --gene_protein_mask toy_model/toy_gene_protein_rule.csv --protein_phenotype_mask toy_model/toy_protein_phenotype_rule_growth.csv --gene toy_model/toy_unsupervised_transcriptomics.csv --supervised_gene toy_model/toy_supervised_transcriptomics.csv --phenotype toy_model/toy_supervised_phenotype_growth.csv --pheno_indices toy_model/toy_phenotype_indices.txt --unsupervised_epochs 50  --up_save_to toy_model/your_unsupervised_learning_result.csv --sup_save_to toy_model/your_supervised_learning_results.csv
 
 * Check your results with standard results
 > python check_results result_type your_results.csv
