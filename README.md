@@ -39,18 +39,17 @@ Run the training code
 > python train_auto_encoder.py --gene_protein_mask masking_matrix_between_gene_protein_layer --protein_phenotype_mask masking_matrix_between_protein_phenotype_layer --gene unsupervised_training_data --supervised_gene supervised_training_x --phenotype supervised_training_y --pheno_indices phenotype_indices_with_training_data_in_phenotype_layer --unsupervised_epochs epoch_number_of_unsupervised_training  --up_save_to unsupervised_training_result --sup_save_to supervised_training_result
 
 
-A toy model example:
+## A toy model example for central metabolism of *E. coli*:
 
-TODO: Weihua
-Give the description of toy model... (Files, how we set up, size, reaction number, phenotype number.)
+The toy model for DeepMetabolism is generated from the metabolic model [e_coli_core](http://bigg.ucsd.edu/static/models/e_coli_core.xml.gz), including 136 genes (without any pseudogenes) as inputs and 1 phenotype (i.e., growth rate). Therefore, there are 136 nodes in gene and protein layers and 1 node in the phenotype layer. The masking matrices defining the model connection are available in `toy_model/toy_gene_pro_rule.csv` and `toy_model/toy_pro_pheno_rule.csv`, generated from `cobrapy_model.py`. There are 136 "one_to_one" connections between gene and protein layers, and 136 "all_to_one" connections between protein and phenotype layers. The training data for this toy model is available in `toy_model\`.
 
+Generate masking matrices `toy_model/toy_gene_pro_rule.csv` and `toy_model/toy_pro_pheno_rule.csv` for 
+>python cobrapy_model.py toy_model/e_coli_core.xml toy_model/toy_pro_pheno_rule.csv toy_model/toy_gene_pro_rule.csv
 
 Activate the virtual environment `tf` to use GPU
-
 > source ~/tf/bin/activate
 
 Run the training code for `toy model`
-
-> python train_auto_encoder.py --gene_protein_mask ~/Dropbox/MachineLearning/autoencoder/Model_Design/toy_model/toy_gene_pro_rule.csv --protein_phenotype_mask ~/Dropbox/MachineLearning/autoencoder/Model_Design/toy_model/toy_pro_pheno_rule_growth.csv --gene ~/Dropbox/MachineLearning/autoencoder/Model_Design/toy_model/toy_un_trans.csv --supervised_gene ~/Dropbox/MachineLearning/autoencoder/Model_Design/toy_model/toy_su_trans.csv --phenotype ~/Dropbox/MachineLearning/autoencoder/Model_Design/toy_model/toy_su_pheno_growth.csv --pheno_indices ~/Dropbox/MachineLearning/autoencoder/Model_Design/toy_model/toy_pheno_indices.txt --unsupervised_epochs 50  --up_save_to un_result_toy.csv --sup_save_to su_result_toy.csv
+> python train_auto_encoder.py --gene_protein_mask toy_model/toy_gene_pro_rule.csv --protein_phenotype_mask toy_model/toy_pro_pheno_rule_growth.csv --gene toy_model/toy_unsupervised_trans.csv --supervised_gene toy_model/toy_supervised_trans.csv --phenotype toy_model/toy_supervised_pheno_growth.csv --pheno_indices toy_model/toy_pheno_indices.txt --unsupervised_epochs 50  --up_save_to un_result_toy.csv --sup_save_to su_result_toy.csv
 
 If you want to run the genome model, you can ...
