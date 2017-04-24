@@ -13,7 +13,7 @@ DeepMetabolism model
 
 The layers in the deep learning network of DeepMetabolism is not fully connected due to the biological constraints based on the constraint-based metabolic modeling. The connections between gene and protein layers are defined by the gene-protein-reaction (GPR) association from a well-developed genome-scale metabolic model (GSM model). We recommand to download the high-quality GSM models from [BiGG model database](bigg.ucsd.edu). These connections can be parsed from `cobrapy_model.py`, which used the [cobrapy package](https://github.com/opencobra/cobrapy). The connections between protein and phenotype layers are defined by the essential proteins of each phenotpe based on the GPR association. In general, if the gene knock-out will lead to 5% decrease of the maximum value of the phenotype of interest, the protein node(s) related to this gene will be connected to this phenotype node. To define the connections between each two layers, we provide the `cobrapy_model.py` to directly generate two masking matrices used in the DeepMetabolism training code.
 
-
+![overview_deepmetabolism](https://github.com/gwh120104/deepmetabolism/blob/master/img/Figure_README.tif)
 
 Right now we use a vanilla autoencoder, where the input is gene expression level. We try to reconstruct gene expression level by going through the protein layer and the phenotype layer. Protein and phenotype layers are feed-forward layers (no recurrent or backward connections). The overall architecture of the autoencoder is:
 
