@@ -57,7 +57,7 @@ DeepMetabolism is designed to run on the GPU based on [TensorFlow](https://www.t
 
 ### A toy model example for central metabolism of *E. coli*:
 
-The toy model for DeepMetabolism is generated from the metabolic model [e_coli_core](http://bigg.ucsd.edu/static/models/e_coli_core.xml.gz), including 136 genes (excluding all the pseudo-genes) as inputs and 1 phenotype (i.e., growth rate). Therefore, there are 136 nodes in gene and protein layers and 1 node in the phenotype layer. The masking matrices defining the model connection are available in `toy_model/toy_gene_pro_rule.csv` and `toy_model/toy_pro_pheno_rule.csv`, generated from `cobrapy_model.py`. There are 136 "one_to_one" connections between gene and protein layers, and 136 "all_to_one" connections between protein and phenotype layers. <u>You can follow the following commands to test DeepMetabolism with our toy model.</u>
+The toy model for DeepMetabolism is generated from the metabolic model [e_coli_core](http://bigg.ucsd.edu/static/models/e_coli_core.xml.gz), including 136 genes (excluding all the pseudo-genes) as inputs and 1 phenotype (i.e., growth rate). Therefore, there are 136 nodes in gene and protein layers and 1 node in the phenotype layer. The masking matrices defining the model connection are available in `toy_model/toy_gene_pro_rule.csv` and `toy_model/toy_pro_pheno_rule.csv`, generated from `cobrapy_model.py`. There are 136 "one_to_one" connections between gene and protein layers, and 136 "all_to_one" connections between protein and phenotype layers. __You can follow the following commands to test DeepMetabolism with our toy model.__
 
 * Generate masking matrices `toy_model/toy_gene_pro_rule.csv` and `toy_model/toy_pro_pheno_rule.csv` for 
 >python cobrapy_model.py toy_model/e_coli_core.xml toy_model/pheno_name.txt toy_model/toy_pro_pheno_rule.csv toy_model/toy_gene_pro_rule.csv toy_model/toy_pheno_indices.txt
@@ -65,7 +65,12 @@ The toy model for DeepMetabolism is generated from the metabolic model [e_coli_c
 * Activate the virtual environment `tf` to use GPU
 > source ~/tf/bin/activate
 
-* Run the training code for `toy model`
-> python train_auto_encoder.py --gene_protein_mask toy_model/toy_gene_pro_rule.csv --protein_phenotype_mask toy_model/toy_pro_pheno_rule_growth.csv --gene toy_model/toy_unsupervised_trans.csv --supervised_gene toy_model/toy_supervised_trans.csv --phenotype toy_model/toy_supervised_pheno_growth.csv --pheno_indices toy_model/toy_pheno_indices.txt --unsupervised_epochs 50  --up_save_to un_result_toy.csv --sup_save_to su_result_toy.csv
+* Run the training and validation code for `toy model`
+> python train_auto_encoder.py --gene_protein_mask toy_model/toy_gene_pro_rule.csv --protein_phenotype_mask toy_model/toy_pro_pheno_rule_growth.csv --gene toy_model/toy_unsupervised_trans.csv --supervised_gene toy_model/toy_supervised_trans.csv --phenotype toy_model/toy_supervised_pheno_growth.csv --pheno_indices toy_model/toy_pheno_indices.txt --unsupervised_epochs 50  --up_save_to toy_model/your_unsupervised_learning_result.csv --sup_save_to toy_model/your_supervised_learning_results.csv
 
-If you want to run the genome model, you can ...
+* Check your results with standard results
+> python check_results result_type your_results.csv
+
+### If you want to run the genome model, we provide the iJO1366 model as the demo for DeepMetabolism.
+
+The [iJO1366 model](http://bigg.ucsd.edu/models/iJO1366) is available to be [downloaded](http://bigg.ucsd.edu/static/models/iJO1366.xml.gz) from BiGG database. You can easily change the inputs (including the constraint-based reconstructed model, available phenotype names, and all the input data) and follow the above instructions for the toy model to run this genome scale. All the materials is available [here](https://www.dropbox.com/s/7kaw8m7ozp3liyc/iJO1366_demo.tar.gz?dl=0).
