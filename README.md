@@ -1,19 +1,22 @@
 What is DeepMetabolism?
 --------------------------
 
-DeepMetabolism is a biology-guided deep learning algorithm to predict phenotype from genome sequencing. DeepMetabolism is a project to use deep learning techniques to decipher complicated relations in biological network and to further bridge the gap between genotype and phenotype. The general design principles are:
+DeepMetabolism is a deep learning algorithm that predicts cell phenotypes from genome sequencing data such as transcriptomics data. DeepMetabolism uses biological knowledge to design a neural network model and integrates unsupervised learning with supervised learning for model prediction. DeepMetabolism meets the design criteria of high accuracy, high speed, and high robustness. By doing so, DeepMetabolism can be used to enrich our understanding of genotype-phenotype correlation and be applied in fields of synthetic biology, metabolic engineering and precision medicine. 
 
+The general design principles are:
 * Interactions in biological networks can be simulated by a a computational network, represented as a graph model.
 * Unsupervised machine learning techniques (such as autoencoder) can be used to train the computational network to approximate the biological network.
 * The whole process is end-to-end, without tweaking between layers.
 
+To develop DeepMetabolism, we implemented a two-step, deep-learning process that used different sets of data. The first step was unsupervised learning that used transcriptomics data, and the second step was supervised learning that used paired data of transcriptomics and phenotype (Figure 1). We expected that unsupervised learning would provide a “rough” neural network model that captured the essence of connections between transcriptomics data and phenotype, while supervised training would fine tune this model and lead to highly accurate predictions of phenotype from transcriptomics data
+
+![overview_deepmetabolism](https://github.com/gwh120104/deepmetabolism/blob/master/img/Figure_README.png)
+Figure 1. Overview of DeepMetabolism algorithm
 
 DeepMetabolism model
 ----------------------------------
 
 The layers in the deep learning network of DeepMetabolism is not fully connected due to the biological constraints based on the constraint-based metabolic modeling. The connections between gene and protein layers are defined by the gene-protein-reaction (GPR) association from a well-developed genome-scale metabolic model (GSM model). We recommand to download the high-quality GSM models from [BiGG model database](bigg.ucsd.edu). These connections can be parsed from `cobrapy_model.py`, which used the [cobrapy package](https://github.com/opencobra/cobrapy). The connections between protein and phenotype layers are defined by the essential proteins of each phenotpe based on the GPR association. In general, if the gene knock-out will lead to 5% decrease of the maximum value of the phenotype of interest, the protein node(s) related to this gene will be connected to this phenotype node. To define the connections between each two layers, we provide the `cobrapy_model.py` to directly generate two masking matrices used in the DeepMetabolism training code.
-
-![overview_deepmetabolism](https://github.com/gwh120104/deepmetabolism/blob/master/img/Figure_README.png)
 
 Right now we use a vanilla autoencoder, where the input is gene expression level. We try to reconstruct gene expression level by going through the protein layer and the phenotype layer. Protein and phenotype layers are feed-forward layers (no recurrent or backward connections). The overall architecture of the autoencoder is:
 
