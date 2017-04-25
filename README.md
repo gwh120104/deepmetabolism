@@ -46,7 +46,7 @@ DeepMetabolism uses masking matrices to define the connections between each two 
 >python cobrapy_model.py genome_scale_metabolic_model_in_sbml_format phenotype_name_with_supervised_training_data masking_matrix_between_protein_phenotype_layer masking_matrix_between_gene_protein_layer phenotype_indices_file
 
 ### Model training and validing
-DeepMetabolism is designed to run on the GPU based on [TensorFlow](https://www.tensorflow.org/). But you can run it on either GPU and CPU. It is important to note that, if you run DeepMetabolism on CPU (i.e., skip the following step), the running speed will be dramatically decreased. 
+DeepMetabolism is designed to run on the GPU based on [TensorFlow](https://www.tensorflow.org/). But you can run it on either GPU and CPU. It is important to note that, if you run DeepMetabolism on CPU (i.e., skip the next step), the running speed will be dramatically decreased. 
 
 * Activate the virtual environment to use GPU (optional)
 > source ~/tf/bin/activate
