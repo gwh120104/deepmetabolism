@@ -71,7 +71,7 @@ The toy model for DeepMetabolism is generated from the metabolic model [e_coli_c
 > python train_auto_encoder.py --gene_protein_mask toy_model/toy_gene_protein_rule.csv --protein_phenotype_mask toy_model/toy_protein_phenotype_rule_growth.csv --gene toy_model/toy_unsupervised_transcriptomics.csv --supervised_gene toy_model/toy_supervised_transcriptomics.csv --phenotype toy_model/toy_supervised_phenotype_growth.csv --pheno_indices toy_model/toy_phenotype_indices.txt --unsupervised_epochs 50  --up_save_to toy_model/your_unsupervised_learning_result.csv --sup_save_to toy_model/your_supervised_learning_results.csv
 
 * Check your results with standard results
-> python check_results result_type your_results.csv
+> python check_results.py result_type your_results.csv
 
 ### A genome model for *E. coli*: iJO1366DM model as the demo for DeepMetabolism.
 
