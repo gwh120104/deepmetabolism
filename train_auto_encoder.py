@@ -21,9 +21,11 @@ growth_scale = 1.0  # divide by
 flags = tf.flags
 FLAGS = flags.FLAGS
 
-gene_max = config['gene_expression_maximum_level']
-gene_min = config['gene_expression_minimum_level']
+data_process = config['data_process']
+gene_max = data_process['gene_expression_maximum_level']
+gene_min = data_process['gene_expression_minimum_level']
 up = config['unsupervised']
+sp = config['supervised']
 
 flags.DEFINE_string('gene_protein_mask', 'gene_pro_rule.csv',
                     '0-1 file indicating connections between gene and protein')
@@ -54,9 +56,9 @@ def read_data():
     gene_protein_mask = genfromtxt(FLAGS.gene_protein_mask, delimiter=',', dtype="float32")[1:, 1:]
     protein_phenotype_mask = genfromtxt(FLAGS.protein_phenotype_mask, delimiter=',', dtype="float32")[1:,1:].transpose()
     gene_train_raw = genfromtxt(up['gene'], delimiter=',', dtype="float32")# [1:, 1:]
-    supervised_gene = genfromtxt(FLAGS.supervised_gene, delimiter=',', dtype="float32")
-    supervised_growth = genfromtxt(FLAGS.phenotype, delimiter=',', dtype="float32")
-    pheno_indices_file = open(FLAGS.pheno_indices,'r')
+    supervised_gene = genfromtxt(sp['gene'], delimiter=',', dtype="float32")
+    supervised_growth = genfromtxt(sp['phenotype'], delimiter=',', dtype="float32")
+    pheno_indices_file = open(sp['indices'],'r')
     reader = csv.reader(pheno_indices_file, delimiter=',')
     supervised_pheno_indices = list(reader)[0]
     supervised_pheno_indices = map(int, supervised_pheno_indices)
