@@ -37,6 +37,7 @@ flags.DEFINE_string('supervised_gene', '', 'Supervised gene training file.')
 flags.DEFINE_string('phenotype', '', 'Phenotype data for supervised training.')
 flags.DEFINE_string('up_save_to', '', 'File to save unsupervised predictions to')
 flags.DEFINE_string('sup_save_to', '', 'File to save supervised predictions to')
+flags.DEFINE_string('sim_save_to', '', 'File to save simulated predictions to')
 flags.DEFINE_string('save_weight_to', '', 'File to save weights to ')
 
 
