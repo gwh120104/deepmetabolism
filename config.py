@@ -12,8 +12,10 @@ config = {
 
 	'supervised':
 		{
-			'gene': 'dummy',
-		}
+			'gene': 'toy_model/toy_supervised_transcriptomics.csv',
+			'phenotype': 'toy_model/toy_supervised_phenotype_growth.csv',
+			'indices': 'toy_model/toy_phenotype_indices.txt',
+		},
 
 }
 
