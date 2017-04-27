@@ -1,8 +1,10 @@
  # -*- coding: utf-8 -*-
 config = {
-	'gene_expression_maximum_level': 10.0,
-	'gene_expression_minimum_level': -10.0,
-
+	'input':
+		{
+			'gene_expression_maximum_level': 10.0,
+			'gene_expression_minimum_level': -10.0,
+		},
 	'unsupervised':
 		{
 			'gene': 'toy_model/toy_unsupervised_transcriptomics.csv',
