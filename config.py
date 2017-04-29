@@ -29,6 +29,15 @@ config = {
 			'indices': 'toy_model/toy_phenotype_indices.txt',
 			'save_to': 'toy_model/your_toy_supervised_result.csv',
 		},
+	'model_preparation':
+		{
+			'input_model': 'toy_model/e_coli_core.xml',
+			'available_phenotypes': 'toy_model/pheno_name.txt',
+			'gene_protein_connection_mask': 'toy_model/toy_gene_protein_rule.csv',
+			'protein_phenotype_connection_mask': 'toy_model/toy_protein_phenotype_rule.csv ',
+			'phenotype_indices': 'toy_model/toy_phenotype_indices.txt',
+
+		},
 
 }
 
