@@ -7,10 +7,11 @@ from sklearn.model_selection import KFold
 import tensorflow as tf
 import numpy as np
 import warnings
+import logging
 
 from collections import defaultdict
 from numpy import genfromtxt
-from autoencoder import PlainAutoEncoder, ShortAutoEncoder
+from autoencoder import PlainAutoEncoder # , ShortAutoEncoder
 from scipy.stats.stats import pearsonr
 from six.moves import xrange
 from config import config
@@ -36,7 +37,7 @@ def get_random_block_from_data(data, batch_size, epoch_start=0):
     return (data[start_index: end_index], (start_index + end_index) / 2)
 
 def read_data():
-    print("Reading data...") #TODO(screen): provide process bar for reading data
+    print("Reading data...")
     gene_protein_mask = genfromtxt(model_setup['gene_protein_connection_mask'], delimiter=',', dtype="float32")[1:, 1:]
     protein_phenotype_mask = genfromtxt(model_setup['protein_phenotype_connection_mask'], delimiter=',', dtype="float32")[1:,1:].transpose()
     gene_train_raw = genfromtxt(up['gene'], delimiter=',', dtype="float32")
@@ -90,8 +91,8 @@ def run_unsupervised_training(auto_encoder, gene_train_repeat, non_repeat):
     for i in xrange(up['epochs']):
         batch_x, middle_point = get_random_block_from_data(gene_train_repeat, up['batch_size'], i)
         loss = auto_encoder.partial_fit(batch_x)
-        print("Unsupervised batch: %d\t sample middle: %d \trmse: %f" % (
-            i, middle_point, math.sqrt(loss / up['batch_size']))) # TODO(screen): provide progress bar based on the progress of epochs for unsupervised training
+        print("\x1b[2K\tUnsupervised batch: {} of {}\t sample middle: {} \trmse: {} \r".format(
+           i, up['epochs'], middle_point, math.sqrt(loss / up['batch_size']))),
     if up['save_to'] != '':
         predict_and_save(auto_encoder, non_repeat)
 
