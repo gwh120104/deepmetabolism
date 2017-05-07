@@ -28,6 +28,13 @@ config = {
 			'converge_delta': 0.0001,
 			'indices': 'toy_model/toy_phenotype_indices.txt',
 			'save_to': 'toy_model/your_toy_supervised_result.csv',
+			'model_save_to': 'toy_model/toy_graphic_model.ckpt',
+		},
+	'model_input':
+		{
+			'gene': 'toy_model/toy_supervised_transcriptomics.csv',
+			'model_load_from': 'toy_model/toy_graphic_model.ckpt',
+			'result_save_to': 'your_prediction_result.csv',
 		},
 	'model_preparation':
 		{
