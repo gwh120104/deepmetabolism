@@ -11,13 +11,10 @@ import logging
 
 from collections import defaultdict
 from numpy import genfromtxt
-from autoencoder import PlainAutoEncoder # , ShortAutoEncoder
+from autoencoder import PlainAutoEncoder
 from scipy.stats.stats import pearsonr
 from six.moves import xrange
 from config import config
-
-flags = tf.flags
-FLAGS = flags.FLAGS
 
 data_process = config['data_process']
 gene_max = data_process['gene_expression_maximum_level']
@@ -26,10 +23,7 @@ up = config['unsupervised']
 sp = config['supervised']
 model_setup = config['model_construct']
 pheno_scale = data_process['phenotype_scale_factor']
-
-#TODO(eric) 
-flags.DEFINE_string('save_weight_to', '', 'File to save weights to ')
-
+model_directory = sp['model_save_to']
 
 def get_random_block_from_data(data, batch_size, epoch_start=0):
     start_index = batch_size * epoch_start % len(data)
@@ -66,17 +60,8 @@ def read_data():
     print("Protein-Phenotype Connections: {}".format(np.count_nonzero(protein_phenotype_mask)))
 
     auto_encoder = PlainAutoEncoder(n_gene, n_protein, n_phenotype, gene_protein_mask_tensor,
-                                    protein_pheno_mask_tensor, supervised_pheno_indices)
+                                    protein_pheno_mask_tensor, supervised_pheno_indices, model_directory)
     return gene_train, gene_train_raw, supervised_gene, supervised_growth, auto_encoder
-
-"""
-def print_middle_tier(auto_encoder, supervised_gene):
-    results = auto_encoder.inspect_tiers(supervised_gene)
-    print("Protein encoding for genes would be: ")
-    print(results[0])
-    print("Growth rate would be:")
-    print(results[1])
-"""
 
 def predict_and_save(auto_encoder, data):
     # Get the whole data as a batch and predict the results.
@@ -142,12 +127,6 @@ def run_supervised_training(auto_encoder, supervised_gene, supervised_growth):
         time_cost = time.time()-start_time
         print("The final cost of {}-fold supervised training is {}, time cost is {}.\n".format(j, last_cost, time_cost))
         w, b = auto_encoder.get_weight_and_bias()
-        if FLAGS.save_weight_to != '':
-            # TODO(eric): to save the model in a way for prediction, but not the weight here.
-            print(w.shape, b.shape, w.dtype, b.dtype)
-            np.savetxt(FLAGS.save_weight_to + "_w_" + str(j) + ".txt", w)
-            with open(FLAGS.save_weight_to + "_b_" + str(j) + ".txt", "w") as fb:
-                fb.write(str(b))
         predicted_pheno = auto_encoder.predict_pheno(gene_test) * pheno_scale
         predictions.append(predicted_pheno)
         actual_values.append(pheno_test * pheno_scale)
@@ -161,12 +140,37 @@ def run_supervised_training(auto_encoder, supervised_gene, supervised_growth):
     return predictions, actual_values
 
 
-def run_training(auto_encoder, gene_train_repeat, gene_train, supervised_gene,
-                 supervised_growth):
+def model_generation(auto_encoder, supervised_gene, supervised_growth):
+    delta = 10.0
+    min_delta = sp['converge_delta']
+    max_epoch = sp['epochs']
+    last_cost = 1000000
+    epoch = 0
+    start_time = time.time()
+    if len(supervised_growth.shape) == 1:
+	supervised_growth = np.vstack(supervised_growth)
+    while math.fabs(delta) > min_delta and epoch < max_epoch:
+	supervised_cost = auto_encoder.supervised_fit(supervised_gene, supervised_growth)
+	delta = last_cost - supervised_cost
+	last_cost = supervised_cost
+	epoch += 1
+    if epoch == max_epoch:
+	warnings.warn("The final model is not converged.")
+	print("Uncoverged delta is {}.".format(delta))
+    else:
+	print("Final training of DeepMetabolism model converges {} at epoch {}.".format(delta, epoch))
+    time_cost = time.time() - start_time
+    print("The final cost of model training is {}, the time cost is {}.\n".format(last_cost, time_cost))
+        
+
+def run_training(auto_encoder, gene_train_repeat, gene_train, supervised_gene, supervised_growth):
     with tf.Session() as sess:
         auto_encoder.init_variables(sess)
         run_unsupervised_training(auto_encoder, gene_train_repeat, gene_train)
         predict, actual = run_supervised_training(auto_encoder, supervised_gene, supervised_growth)
+	model_generation(auto_encoder, supervised_gene, supervised_growth)
+	save_path = auto_encoder.model_saver()
+	print("Your graphic model is saved to {}.".format(save_path))
 
 
 #### Do not change anything below
