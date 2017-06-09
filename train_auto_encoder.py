@@ -14,7 +14,7 @@ from numpy import genfromtxt
 from autoencoder import PlainAutoEncoder
 from scipy.stats.stats import pearsonr
 from six.moves import xrange
-from config import config
+from confige import config
 
 data_process = config['data_process']
 gene_max = data_process['gene_expression_maximum_level']
